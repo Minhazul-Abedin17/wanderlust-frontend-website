@@ -179,7 +179,6 @@ export default function AddDestinationPage() {
                 placeholder="https://example.com/image.jpg"
               />
             </div>
-
             <div className="grid gap-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
@@ -191,7 +190,6 @@ export default function AddDestinationPage() {
                 rows={3}
               />
             </div>
-
             <CardFooter className="mt-8 flex justify-end gap-3 border-0! bg-transparent! p-0!">
               <Button
                 type="submit"
