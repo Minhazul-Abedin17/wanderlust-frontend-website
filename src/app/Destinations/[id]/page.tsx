@@ -1,4 +1,3 @@
-
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,19 +19,24 @@ import { sampleDestinations, type Destination } from "@/lib/destinations";
 import EditDestination from "@/components/EditDestination";
 import DeleteDestination from "@/components/DeleteDestination";
 import BookingCard from "@/app/booking/BookingCard";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { getTokenFromServer } from "@/lib/getTokenFromServer";
 
 type DestinationWithDate = Destination & {
   departureDate?: string | null;
 };
 
-async function getDestination(
-  id: string,
-): Promise<DestinationWithDate | null> {
+async function getDestination(id: string): Promise<DestinationWithDate | null> {
+  
+  const token = await getTokenFromServer()
   try {
-    const res = await fetch(
-      `http://localhost:8000/Destinations/${id}`,
-      { cache: "no-store" },
-    );
+    const res = await fetch(`http://localhost:8000/Destinations/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+      cache: "no-store",
+    });
 
     if (res.ok) {
       const data = await res.json();
@@ -48,9 +52,7 @@ async function getDestination(
     // Use sample data if the API is unavailable.
   }
 
-  return (
-    sampleDestinations.find((item) => String(item.id) === id) ?? null
-  );
+  return sampleDestinations.find((item) => String(item.id) === id) ?? null;
 }
 
 export async function generateMetadata({
@@ -98,10 +100,7 @@ export default async function DestinationDetailsPage({
   if (!destination) notFound();
 
   const price = Number(destination.price) || 0;
-  const rating = Math.min(
-    5,
-    Math.max(0, Number(destination.rating) || 4.5),
-  );
+  const rating = Math.min(5, Math.max(0, Number(destination.rating) || 4.5));
 
   return (
     <main className="min-h-screen bg-slate-50/80 pb-16 dark:bg-slate-950">

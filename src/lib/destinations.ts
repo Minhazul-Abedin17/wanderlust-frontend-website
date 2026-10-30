@@ -20,6 +20,8 @@ export type DestinationCardModel = {
   duration: string;
   imageUrl: string | null;
   rating: number;
+  departureDate?: string;
+  description?: string;
 };
 
 export function toDestinationCardModel(
